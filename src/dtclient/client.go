@@ -142,7 +142,7 @@ func NewClient(url, apiToken, paasToken string, opts ...Option) (Client, error) 
 		hostCache: make(map[string]hostInfo),
 		httpClient: &http.Client{
 			Transport: http.DefaultTransport.(*http.Transport).Clone(),
-			Timeout:   15 * time.Minute,
+			Timeout:   3 * time.Minute,
 		},
 	}
 

@@ -48,6 +48,7 @@ const (
 // The response body must be closed by the caller when no longer used.
 func (dtc *dynatraceClient) makeRequest(url string, tokenType tokenType) (*http.Response, error) {
 	req, err := http.NewRequest(http.MethodGet, url, nil)
+	req.Close = true
 	if err != nil {
 		return nil, errors.WithMessage(err, "error initializing http request")
 	}
