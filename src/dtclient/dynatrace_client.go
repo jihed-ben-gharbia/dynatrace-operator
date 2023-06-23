@@ -108,10 +108,11 @@ func (dtc *dynatraceClient) getServerResponseData(response *http.Response) ([]by
 
 func (dtc *dynatraceClient) makeRequestAndUnmarshal(url string, token tokenType, response interface{}) error {
 	resp, err := dtc.makeRequest(url, token)
+	defer CloseBodyAfterRequest(resp)
+	defer dtc.httpClient.Transport.(*http.Transport).CloseIdleConnections()
 	if err != nil {
 		return err
 	}
-	defer CloseBodyAfterRequest(resp)
 
 	responseData, err := dtc.getServerResponseData(resp)
 	if err != nil {
@@ -123,10 +124,11 @@ func (dtc *dynatraceClient) makeRequestAndUnmarshal(url string, token tokenType,
 
 func (dtc *dynatraceClient) makeRequestForBinary(url string, token tokenType, writer io.Writer) (string, error) {
 	resp, err := dtc.makeRequest(url, token)
+	defer CloseBodyAfterRequest(resp)
+	defer dtc.httpClient.Transport.(*http.Transport).CloseIdleConnections()
 	if err != nil {
 		return "", err
 	}
-	defer CloseBodyAfterRequest(resp)
 
 	if resp.StatusCode != http.StatusOK {
 		var errorResponse serverErrorResponse
