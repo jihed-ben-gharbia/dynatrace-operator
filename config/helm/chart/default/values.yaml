@@ -86,7 +86,7 @@ csidriver:
         memory: 100Mi
       limits:
         cpu: 300m
-        memory: 100Mi
+        memory: 500Mi
   registrar:
     resources:
       requests:
