@@ -65,6 +65,10 @@ func (installer Installer) pullImageInfo(registryAuthPath string, imageName stri
 	if err != nil {
 		return nil, errors.WithMessagef(err, "getting image %q", imageName)
 	}
+
+	// configFile, _ := image.ConfigFile()
+	// value := configFile.Config.Healthcheck
+
 	return &image, nil
 }
 

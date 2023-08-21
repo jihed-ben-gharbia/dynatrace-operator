@@ -71,3 +71,7 @@ func (updater *syntheticUpdater) UseTenantRegistry(ctx context.Context, registry
 	defaultImage := updater.dynakube.DefaultSyntheticImage()
 	return updateVersionStatusForTenantRegistry(ctx, updater.apiReader, updater.dynakube, updater.Target(), updater.versionFunc, defaultImage, registryAuthPath)
 }
+
+func (updater *syntheticUpdater) SetHealthcheck(ctx context.Context, apiReader client.Reader, dynakube *dynatracev1beta1.DynaKube, registryAuthPath string) {
+	// TODO
+}

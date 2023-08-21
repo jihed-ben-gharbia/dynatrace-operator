@@ -9,6 +9,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+const OneAgentUpdaterName = "oneagent"
+
 type oneAgentUpdater struct {
 	dynakube    *dynatracev1beta1.DynaKube
 	apiReader   client.Reader
@@ -31,7 +33,7 @@ func newOneAgentUpdater(
 }
 
 func (updater oneAgentUpdater) Name() string {
-	return "oneagent"
+	return OneAgentUpdaterName
 }
 
 func (updater oneAgentUpdater) IsEnabled() bool {
@@ -99,4 +101,14 @@ func (updater *oneAgentUpdater) CheckForDowngrade(latestVersion string) (bool, e
 		}
 	}
 	return isDowngrade(updater.Name(), previousVersion, latestVersion)
+}
+
+func (updater *oneAgentUpdater) SetHealthcheck(ctx context.Context, apiReader client.Reader, dynakube *dynatracev1beta1.DynaKube, registryAuthPath string) {
+	// TODO
+
+	// imageInfo, _ := PullImageInfo(ctx, apiReader, registry.NewClient(), dynakube, updater.Target().ImageID, registryAuthPath)
+
+	// configFile, _ := imageInfo.ConfigFile()
+
+	// dynakube.Status.OneAgent.Healthcheck = configFile.Config.Healthcheck
 }

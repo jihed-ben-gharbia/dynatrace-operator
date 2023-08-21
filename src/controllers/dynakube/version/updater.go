@@ -27,9 +27,11 @@ type versionStatusUpdater interface {
 	LatestImageInfo() (*dtclient.LatestImageInfo, error)
 
 	UseTenantRegistry(context.Context, string) error
+
+	SetHealthcheck(context.Context, client.Reader, *dynatracev1beta1.DynaKube, string)
 }
 
-func (reconciler *Reconciler) run(ctx context.Context, updater versionStatusUpdater, registryAuthPath string) error {
+func (reconciler *Reconciler) run(ctx context.Context, updater versionStatusUpdater, registryAuthPath string) error { //nolint:revive // cyclomatic threshold reached
 	currentSource := determineSource(updater)
 	var err error
 	defer func() {
@@ -69,13 +71,17 @@ func (reconciler *Reconciler) run(ctx context.Context, updater versionStatusUpda
 		if err != nil || isDowngrade {
 			return err
 		}
-
 		err = setImageIDWithDigest(ctx, reconciler.apiReader, reconciler.dynakube, updater.Target(), reconciler.versionFunc, publicImage.String(), registryAuthPath)
 		if err != nil {
 			log.Info("could not update version status according to the public registry", "updater", updater.Name())
 			return err
 		}
 		return nil
+	}
+
+	// for now its only implemented on the OneAgent updater
+	if updater.Name() == OneAgentUpdaterName {
+		updater.SetHealthcheck(ctx, reconciler.apiReader, reconciler.dynakube, registryAuthPath)
 	}
 
 	log.Info("updating version status according to the tenant registry", "updater", updater.Name())

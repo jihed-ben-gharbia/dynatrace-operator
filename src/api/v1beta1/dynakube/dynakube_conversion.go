@@ -80,6 +80,7 @@ func (src *DynaKube) ConvertTo(dstRaw conversion.Hub) error {
 	}
 	dst.Status.OneAgent.LastUpdateProbeTimestamp = src.Status.OneAgent.LastProbeTimestamp
 	dst.Status.OneAgent.Version = src.Status.OneAgent.Version
+	dst.Status.OneAgent.Healthcheck = src.Status.OneAgent.Healthcheck
 
 	dst.Status.Phase = src.Status.Phase
 	dst.Status.Tokens = ""

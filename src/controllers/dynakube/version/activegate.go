@@ -70,3 +70,7 @@ func (updater *activeGateUpdater) UseTenantRegistry(ctx context.Context, registr
 	defaultImage := updater.dynakube.DefaultActiveGateImage()
 	return updateVersionStatusForTenantRegistry(ctx, updater.apiReader, updater.dynakube, updater.Target(), updater.versionFunc, defaultImage, registryAuthPath)
 }
+
+func (updater *activeGateUpdater) SetHealthcheck(ctx context.Context, apiReader client.Reader, dynakube *dynatracev1beta1.DynaKube, registryAuthPath string) {
+	// TODO
+}

@@ -6,6 +6,7 @@ import (
 	"github.com/Dynatrace/dynatrace-operator/src/api/status"
 	dynatracev1beta1 "github.com/Dynatrace/dynatrace-operator/src/api/v1beta1/dynakube"
 	"github.com/Dynatrace/dynatrace-operator/src/dtclient"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type codeModulesUpdater struct {
@@ -80,4 +81,8 @@ func (updater *codeModulesUpdater) UseTenantRegistry(_ context.Context, _ string
 		},
 	}
 	return nil
+}
+
+func (updater *codeModulesUpdater) SetHealthcheck(ctx context.Context, apiReader client.Reader, dynakube *dynatracev1beta1.DynaKube, registryAuthPath string) {
+	// TODO
 }

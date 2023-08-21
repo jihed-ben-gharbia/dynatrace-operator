@@ -6,6 +6,7 @@ package dynakube
 import (
 	"github.com/Dynatrace/dynatrace-operator/src/api/status"
 	"github.com/Dynatrace/dynatrace-operator/src/api/v1alpha1"
+	registryv1 "github.com/google/go-containerregistry/pkg/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -297,6 +298,9 @@ type OneAgentStatus struct {
 
 	// LastUpdateProbeTimestamp defines the last timestamp when the querying for updates have been done
 	LastUpdateProbeTimestamp *metav1.Time `json:"lastUpdateProbeTimestamp,omitempty"`
+
+	// TODO:
+	Healthcheck registryv1.HealthConfig `json:"Healthcheck,omitempty"`
 }
 
 type OneAgentInstance struct {

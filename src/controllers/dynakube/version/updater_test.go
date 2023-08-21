@@ -64,6 +64,9 @@ func (m *mockUpdater) CheckForDowngrade(latestVersion string) (bool, error) {
 	return args.Bool(0), args.Error(1)
 }
 
+func (m *mockUpdater) SetHealthcheck(context.Context, client.Reader, *dynatracev1beta1.DynaKube, string) {
+}
+
 func TestRun(t *testing.T) {
 	ctx := context.TODO()
 	testImage := dtclient.LatestImageInfo{

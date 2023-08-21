@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/Dynatrace/dynatrace-operator/src/api/status"
+	registryv1 "github.com/google/go-containerregistry/pkg/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -116,6 +117,9 @@ type OneAgentStatus struct {
 
 	// Information about OneAgent's connections
 	ConnectionInfoStatus OneAgentConnectionInfoStatus `json:"connectionInfoStatus,omitempty"`
+
+	// TODO:
+	Healthcheck registryv1.HealthConfig `json:"Healthcheck,omitempty"`
 }
 
 type OneAgentInstance struct {
