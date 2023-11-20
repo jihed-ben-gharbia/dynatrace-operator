@@ -6,6 +6,10 @@ import (
 	"fmt"
 	"os"
 
+	dynatracev1beta1 "github.com/Dynatrace/dynatrace-operator/pkg/api/v1beta1/dynakube"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"github.com/pkg/errors"
+	"k8s.io/apimachinery/pkg/labels"
 	"github.com/Dynatrace/dynatrace-operator/pkg/util/kubeobjects/env"
 	k8spod "github.com/Dynatrace/dynatrace-operator/pkg/util/kubeobjects/pod"
 	maputils "github.com/Dynatrace/dynatrace-operator/pkg/util/map"
@@ -57,6 +61,21 @@ type podMutatorWebhook struct {
 	requestCounter metric.Int64Counter
 }
 
+// match uses the pod selector in the dynakube to check if it matches a given pod
+// if the pod selector is not set on the dynakube its an automatic match
+func matchPod(dk dynatracev1beta1.DynaKube, pod *corev1.Pod) (bool, error) {
+	if dk.PodSelector() == nil {
+		return true, nil
+	}
+
+	selector, err := metav1.LabelSelectorAsSelector(dk.PodSelector())
+	if err != nil {
+		return false, errors.WithStack(err)
+	}
+
+	return selector.Matches(labels.Set(pod.Labels)), nil
+}
+
 func (webhook *podMutatorWebhook) Handle(ctx context.Context, request admission.Request) admission.Response {
 	webhook.countHandleMutationRequest(ctx)
 
@@ -78,6 +97,20 @@ func (webhook *podMutatorWebhook) Handle(ctx context.Context, request admission.
 
 	podName := mutationRequest.PodName()
 	if !mutationRequired(mutationRequest) || webhook.isOcDebugPod(mutationRequest.Pod) {
+		return emptyPatch
+	}
+
+	matches,err := matchPod(mutationRequest.DynaKube,mutationRequest.Pod)
+
+	if err != nil {
+		emptyPatch.Result.Message = fmt.Sprintf("unable to inject into pod (err=%s)", err.Error())
+		log.Error(err, "Error while matching Pod")
+		span.RecordError(err)
+		return emptyPatch
+	}
+
+	if (!matches){
+		emptyPatch.Result.Message = "Pod was not selected for injection"
 		return emptyPatch
 	}
 

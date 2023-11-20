@@ -134,6 +134,10 @@ type DynaKubeSpec struct { // nolint:revive
 	// +operator-sdk:csv:customresourcedefinitions:type=spec,displayName="Namespace Selector",order=17,xDescriptors="urn:alm:descriptor:com.tectonic.ui:selector:core:v1:Namespace"
 	NamespaceSelector metav1.LabelSelector `json:"namespaceSelector,omitempty"`
 
+	// Applicable only for applicationMonitoring or cloudNativeFullStack configuration types. The pods where you want Dynatrace Operator to inject.
+	// +operator-sdk:csv:customresourcedefinitions:type=spec,displayName="Pod Selector",order=18,xDescriptors="urn:alm:descriptor:com.tectonic.ui:selector:core:v1:Pod"
+	PodSelector metav1.LabelSelector `json:"podSelector,omitempty"`
+
 	// General configuration about OneAgent instances.
 	// You can't enable more than one module (classicFullStack, cloudNativeFullStack, hostMonitoring, or applicationMonitoring).
 	// +operator-sdk:csv:customresourcedefinitions:type=spec,displayName="OneAgent",xDescriptors="urn:alm:descriptor:com.tectonic.ui:text"

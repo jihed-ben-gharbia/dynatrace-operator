@@ -259,6 +259,10 @@ func (dk *DynaKube) NamespaceSelector() *metav1.LabelSelector {
 	return &dk.Spec.NamespaceSelector
 }
 
+func (dk *DynaKube) PodSelector() *metav1.LabelSelector {
+	return &dk.Spec.PodSelector
+}
+
 func (dk *DynaKube) NodeSelector() map[string]string {
 	switch {
 	case dk.ClassicFullStackMode():

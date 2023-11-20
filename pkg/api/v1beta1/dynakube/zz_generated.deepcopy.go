@@ -350,6 +350,7 @@ func (in *DynaKubeSpec) DeepCopyInto(out *DynaKubeSpec) {
 		**out = **in
 	}
 	in.NamespaceSelector.DeepCopyInto(&out.NamespaceSelector)
+	in.PodSelector.DeepCopyInto(&out.PodSelector)
 	in.OneAgent.DeepCopyInto(&out.OneAgent)
 	in.ActiveGate.DeepCopyInto(&out.ActiveGate)
 	in.Routing.DeepCopyInto(&out.Routing)
